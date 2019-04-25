@@ -1,22 +1,24 @@
 const express = require('express')
 const { ApolloServer, gql } = require('apollo-server-express')
+const persistency = require('./persistency')
 
 const typeDefs = gql`
-  type Query {
-    
+  type Product {
+    id: Int!
+    title: String!
+    price: Float!
   }
 
-  type Mutation {
-    
+  type Query {
+    products: [Product!]!
   }
 `
 
 const resolvers = {
   Query: {
-    
-  },
-  Mutation: {
-    
+    products: () => {
+      return persistency.products.getProducts()
+    }
   },
 }
 
