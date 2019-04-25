@@ -1,6 +1,7 @@
 const express = require('express')
 const { ApolloServer, gql } = require('apollo-server-express')
 const persistency = require('./persistency')
+const { createLoaders } = require('./loaders')
 
 const typeDefs = gql`
   type Merchant {
@@ -22,8 +23,11 @@ const typeDefs = gql`
 
 const resolvers = {
   Product: {
-    merchant: (parent) => {
-      return persistency.merchants.getMerchantById(parent.merchantId)
+    merchant: (parent, args, context) => {
+      if (!parent.merchantId) {
+        return
+      }
+      return context.loaders.merchants.load(parent.merchantId)
     }
   },
   Query: {
@@ -34,7 +38,15 @@ const resolvers = {
 }
 
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers })
+const apolloServer = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: () => {
+    return {
+      loaders: createLoaders(),
+    }
+  }
+})
 const app = express()
 
 apolloServer.applyMiddleware({ app })

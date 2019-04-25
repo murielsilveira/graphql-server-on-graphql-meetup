@@ -30,12 +30,13 @@ const merchants = [
 ]
 
 function getProducts() {
-  // console.log('SELECT * FROM products')
+  console.log('SELECT * FROM products')
   return products
 }
 
-function getMerchantById(id) {
-  return merchants.find(merchant => merchant.id === id)
+function getMerchantsByIds(ids) {
+  console.log('SELECT * FORM merchants WHERE id IN (:ids)', ids)
+  return ids.map(id =>  merchants.find(merchant => merchant.id === id))
 }
 
 module.exports = {
@@ -43,6 +44,6 @@ module.exports = {
     getProducts,
   },
   merchants: {
-    getMerchantById,
+    getMerchantsByIds,
   }
 }
