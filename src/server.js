@@ -3,10 +3,16 @@ const { ApolloServer, gql } = require('apollo-server-express')
 const persistency = require('./persistency')
 
 const typeDefs = gql`
+  type Merchant {
+    id: Int!
+    name: String!
+  }
+
   type Product {
     id: Int!
     title: String!
     price: Float!
+    merchant: Merchant
   }
 
   type Query {
@@ -15,6 +21,11 @@ const typeDefs = gql`
 `
 
 const resolvers = {
+  Product: {
+    merchant: (parent) => {
+      return persistency.merchants.getMerchantById(parent.merchantId)
+    }
+  },
   Query: {
     products: () => {
       return persistency.products.getProducts()
