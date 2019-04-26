@@ -5,9 +5,12 @@
   "author": "Muriel Silveira <murielkong@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "nodemon --watch src src/server.js"
   },
   "dependencies": {
-    "express": "^4.16.4"
+    "apollo-server-express": "^2.4.8",
+    "express": "^4.16.4",
+    "graphql": "^14.2.1",
+    "nodemon": "^1.18.11"
   }
 }
